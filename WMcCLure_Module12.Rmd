@@ -1,0 +1,66 @@
+---
+title: "DBI an Introduction"
+author: "Wayne McClure"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+##so it begins
+
+```
+
+## Background 
+
+One of the challenges in any programming language is redundancy. Particularly code that solves a common problem. If a mahalanobis distance algorithm is needed, the process for programmatically approaching the statistical method behind a mahalanobis distance and any subsequent derivations, such as graphs, can all be readily done with oine skilled enough in the statistical and programming knowledge to write from scratch
+However, this type of analysis is common enough. Enough so that the community in R has created a package, a collection of code/functions stored in a central repository.[More can be seen here](https://www.tutorialspoint.com/r/r_packages.htm)
+
+A great quote from Jenny Bryan
+>Of course someone has to write loops. It doesn’t have to be you.
+
+This is the general premise of Packages. However, like any quest gathering items and *packages* not everything you might need is contained in the same place and library.
+
+```{r libraries}
+library(dm)
+library(DBI)
+library(rquery)
+library(odbc)
+```
+
+## The proposal and packages
+
+The above packages all bring something to the table for proper data analysis of a potentially unknown database. 
+
+My final project will bring together the unique functions from each into a single cohesive package allowing for the intelligent query, exploration, and connection to known databases.
+
+Our first useful tool is the DBI and DM packages to create a ODBC connection to an existing MySQL Server database:
+
+```{r, echo=TRUE}
+
+con <- dbConnect(RMySQL::MySQL(), 
+                             dbname = "employees", 
+                             host = "192.168.50.71", 
+                             port = 49153,
+                             user = "root",
+                             password = "Camplovers01")
+
+
+```
+
+The components of most us to us in the DM package are the `dm_from_src()` fucntion which passes the connection object, we just created above, into an argument that then can be used to pull in data from tables
+```{r, echo=TRUE}
+#> ── Table source ───────────────────────────────────────────────────────────
+#> src:  mysql  
+#> ── Metadata ───────────────────────────────────────────────────────────────
+#> Tables: `departments`, `dept_emp`, `dept_manager`, `employees`, `salaries`, … (6 total)
+#> Columns: 57
+
+```
+
+
+#The other components
+Other areas where this final packakage will suceed will include visualization of the schemas using a ERD diagrams using functions from the RQuery library to bring in simple select statements to bring in tables as data objects.
